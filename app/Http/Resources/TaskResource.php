@@ -15,10 +15,15 @@ class TaskResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id"=> $this->id,
-            "name"=> $this->name,
-            "is_completed"=>(bool) $this->is_completed
-
+            "id" => $this->id,
+            "name" => $this->name,
+            "detail" => $this->detail,
+            "price" => (float) $this->price,
+            "bookStatus" => (bool) $this->bookStatus,
+            "image" => $this->image
+                ? asset('storage/' . $this->image)
+                : asset('storage/default-placeholder.jpg'),
         ];
     }
+
 }

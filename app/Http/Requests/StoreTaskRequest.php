@@ -23,6 +23,11 @@ class StoreTaskRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'detail' => 'required|string', // Allows longer text
+            'price' => 'required|numeric|min:0',
+            'bookStatus' => 'required|numeric|in:1,2,3', // Restrict to 1, 2, or 3
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
+
 }
