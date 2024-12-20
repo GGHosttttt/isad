@@ -19,7 +19,7 @@ class TaskResource extends JsonResource
             "name" => $this->name,
             "detail" => $this->detail,
             "price" => (float) $this->price,
-            "bookStatus" => (bool) $this->bookStatus,
+            "bookStatus" => $this->bookStatus,
             "image" => $this->image
                 ? asset('storage/' . $this->image)
                 : asset('storage/default-placeholder.jpg'),

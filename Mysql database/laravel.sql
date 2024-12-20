@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 15, 2024 at 06:13 AM
+-- Generation Time: Dec 20, 2024 at 03:53 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,32 @@ SET time_zone = "+00:00";
 --
 -- Database: `laravel`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `books`
+--
+
+CREATE TABLE `books` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `fieldId` int(11) DEFAULT NULL,
+  `username` varchar(255) NOT NULL,
+  `phoneNumber` varchar(255) NOT NULL,
+  `time` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `message` text NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '0: Waiting, 1: Approved, 2: Rejected',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `books`
+--
+
+INSERT INTO `books` (`id`, `fieldId`, `username`, `phoneNumber`, `time`, `date`, `message`, `status`, `created_at`, `updated_at`) VALUES
+(3, 2, 'rith', '012345678', 3, '2025-01-21', 'lorem lorem', 1, '2024-12-19 18:43:17', '2024-12-19 18:43:17');
 
 -- --------------------------------------------------------
 
@@ -113,11 +139,13 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, '0001_01_01_000000_create_users_table', 1),
-(2, '0001_01_01_000001_create_cache_table', 1),
-(3, '0001_01_01_000002_create_jobs_table', 1),
-(4, '2024_12_14_050951_create_tasks_table', 1),
-(5, '2024_12_14_055346_create_personal_access_tokens_table', 2);
+(28, '0001_01_01_000000_create_users_table', 1),
+(29, '0001_01_01_000001_create_cache_table', 1),
+(30, '0001_01_01_000002_create_jobs_table', 1),
+(31, '2024_12_14_050951_create_tasks_table', 1),
+(32, '2024_12_14_055346_create_personal_access_tokens_table', 1),
+(33, '2024_12_15_062352_create_book_table', 1),
+(34, '2024_12_15_141941_status', 1);
 
 -- --------------------------------------------------------
 
@@ -170,7 +198,8 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('aottuLACFkGiTGCiKev8WCnr6BlziMuJ5ouc4AEZ', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Herd/1.13.0 Chrome/120.0.6099.291 Electron/28.2.5 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiOFN2ZVU3d0l6OFZxVFM5S1MwMzJKR3NIN2JtTHJHeEdmMzhRN2EyQiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9pc2FkLnRlc3QvP2hlcmQ9cHJldmlldyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1734155182);
+('1NolouBtbUzIY0XbPKCYrTS0TgrVE2vmSw8Zwqla', NULL, '127.0.0.1', 'PostmanRuntime/7.43.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoidGNUR0ZMWjB0M0RaZXVLcmI5bDlEVXQxM0c3Sm56MFBuaWZtVWlMOSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MTY6Imh0dHA6Ly9pc2FkLnRlc3QiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1734618818),
+('Y7B4VElJThPbnLYh8l6XPQFdb6bcZSF9EivzvCEb', NULL, '127.0.0.1', 'PostmanRuntime/7.43.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiVjFORmlOcTZ1RkNRZXVPTmFMaVVNdWNEN0k1dU90NGNqT3dJOUZ1MyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MTY6Imh0dHA6Ly9pc2FkLnRlc3QiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1734659831);
 
 -- --------------------------------------------------------
 
@@ -181,21 +210,29 @@ INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, 
 CREATE TABLE `tasks` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
-  `is_completed` tinyint(1) NOT NULL DEFAULT 0,
+  `detail` text NOT NULL,
+  `price` float NOT NULL,
+  `bookStatus` tinyint(4) NOT NULL DEFAULT 1 COMMENT '0: NotAvaliable, 1: Avaliable, 2: Using',
+  `image` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `detail` text DEFAULT NULL,
-  `price` float DEFAULT NULL,
-  `bookStatus` tinyint(1) DEFAULT 0,
-  `image` varchar(255) DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `tasks`
 --
 
-INSERT INTO `tasks` (`id`, `name`, `is_completed`, `created_at`, `updated_at`, `detail`, `price`, `bookStatus`, `image`) VALUES
-(1, 'volleyball', 0, '2024-12-14 06:47:44', '2024-12-14 06:47:44', 'lorem lorem', 10, 1, 'uploads/vkEajM330qGvr4ehK7Y3B9gf67AC1Ry7jX1j8sDD.png');
+INSERT INTO `tasks` (`id`, `name`, `detail`, `price`, `bookStatus`, `image`, `created_at`, `updated_at`) VALUES
+(1, 'soccer', 'lorem lorem', 10, 2, 'https://via.placeholder.com/640x480.png/001155?text=books+Faker+aut', '2024-12-19 06:44:21', '2024-12-19 07:14:45'),
+(2, 'badmintion', 'lorem lorem', 10, 2, 'https://via.placeholder.com/640x480.png/00dd44?text=books+Faker+ut', '2024-12-19 06:44:21', '2024-12-19 07:30:50'),
+(3, 'consectetur repellat vitae', 'Sit iusto et et qui repellat. Et provident consectetur exercitationem porro et autem a vel. Et ullam amet qui repudiandae.', 996.5, 1, 'https://via.placeholder.com/640x480.png/004400?text=books+Faker+aliquid', '2024-12-19 06:44:21', '2024-12-19 06:44:21'),
+(4, 'sapiente cupiditate ut', 'Nesciunt rerum et recusandae rerum sed assumenda inventore. Sequi alias voluptatem at maxime sed incidunt nobis. Qui dignissimos laborum similique corrupti ratione.', 791.57, 0, 'https://via.placeholder.com/640x480.png/00dd33?text=books+Faker+repudiandae', '2024-12-19 06:44:21', '2024-12-19 06:44:21'),
+(5, 'qui ea cum', 'Perferendis dolorem suscipit nobis repudiandae ab. Ullam suscipit consectetur dolorum.', 823.28, 1, 'https://via.placeholder.com/640x480.png/0077dd?text=books+Faker+quas', '2024-12-19 06:44:21', '2024-12-19 06:44:21'),
+(6, 'rerum optio voluptates', 'Quidem possimus sint voluptas repellendus animi molestias. Qui fugiat ratione vitae labore.', 342.88, 2, 'https://via.placeholder.com/640x480.png/005500?text=books+Faker+nemo', '2024-12-19 06:44:21', '2024-12-19 06:44:21'),
+(7, 'eos et tenetur', 'Itaque commodi voluptatem sed maiores hic earum. At atque tempore quia. Sunt odio quis ipsa consectetur et error.', 295.73, 2, 'https://via.placeholder.com/640x480.png/00eeaa?text=books+Faker+hic', '2024-12-19 06:44:21', '2024-12-19 06:44:21'),
+(8, 'nihil non culpa', 'Maiores exercitationem sit asperiores maiores beatae. Molestias odio numquam est est cupiditate eos tenetur.', 559.11, 2, 'https://via.placeholder.com/640x480.png/0033aa?text=books+Faker+harum', '2024-12-19 06:44:21', '2024-12-19 06:44:21'),
+(9, 'dicta illo hic', 'Modi qui qui dolore non inventore quibusdam est architecto. Et autem quis sed aut eveniet facere beatae.', 818.36, 0, 'https://via.placeholder.com/640x480.png/009911?text=books+Faker+nam', '2024-12-19 06:44:21', '2024-12-19 06:44:21'),
+(10, 'modi autem et', 'Velit aut doloribus illo. Omnis non porro sunt consequatur eligendi non cum. Vero consectetur corrupti nobis sapiente ut voluptatem voluptates.', 307.88, 2, 'https://via.placeholder.com/640x480.png/009933?text=books+Faker+cupiditate', '2024-12-19 06:44:21', '2024-12-19 06:44:21');
 
 -- --------------------------------------------------------
 
@@ -217,6 +254,12 @@ CREATE TABLE `users` (
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `books`
+--
+ALTER TABLE `books`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `cache`
@@ -296,6 +339,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `books`
+--
+ALTER TABLE `books`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -311,7 +360,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -323,7 +372,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`

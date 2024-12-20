@@ -17,9 +17,11 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->sentence(),
-            'is_completed' =>rand(0,1),
-
+            'name' => fake()->words(3, true), // Generates a 3-word string for the name
+            'detail' => fake()->paragraph(2), // Generates a paragraph for detail
+            'price' => fake()->randomFloat(2, 10, 1000), // Generates a price between 10 and 1000 with 2 decimal places
+            'bookStatus' => fake()->numberBetween(0, 2), // Generates a random integer between 0 and 2
+            'image' => fake()->imageUrl(640, 480, 'books', true, 'Faker'), // Generates a fake image URL
         ];
     }
 }
