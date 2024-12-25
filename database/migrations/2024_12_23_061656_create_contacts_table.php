@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('phoneNumber'); // String for phone number
             $table->text('message'); // Text column for longer messages
 
+            $table->timestamps(); // Adds `created_at` and `updated_at`
         });
     }
 
