@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->Integer('fieldId'); // Auto-incrementing and unique field ID
             $table->string('username'); // String for username
             $table->string('phoneNumber'); // String for phone number
-            $table->integer('time'); // Time column
+            $table->string('time'); // Time column
             $table->date('date'); // Date column
             $table->text('message'); // Text column for longer messages
             $table->tinyInteger('status')      // Status column with default value

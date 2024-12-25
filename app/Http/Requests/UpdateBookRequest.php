@@ -25,7 +25,7 @@ class UpdateBookRequest extends StoreBookRequest
             'fieldId' => 'required|numeric',
             'username' => 'required|string|max:255',
             'phoneNumber' => 'required|regex:/^0[1-9]{1}[0-9]{7,8}$/',
-            'time' => 'required|numeric',
+            'time' => 'required|string|max:255',
             'date' => 'required|date_format:Y-m-d',
             'message' => 'string|max:255',
             'status' => 'required|numeric|in:0,1,2',
