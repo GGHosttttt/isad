@@ -1,40 +1,56 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-
-use Carbon\Carbon;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\BookResource;
-use App\Http\Requests\StoreBookRequest;
-use App\Http\Requests\UpdateBookRequest;
-use App\Models\Book;
-class BookController extends Controller
+use App\Http\Resources\ContactResource;
+use App\Http\Requests\StoreContactRequest;
+use App\Http\Requests\UpdateContactRequest;
+use App\Models\contact;
+
+class ContactController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        return ContactResource::collection(contact::all());
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-
+        //
     }
-    public function store(StoreBookRequest $request)
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreContactRequest $request)
     {
-        $book = Book::create(attributes: $request->validated());
+        $book = contact::create(attributes: $request->validated());
         $book->save();
 
         return response()->json([
             'success' => true,
-            'data' => BookResource::make($book),
+            'data' => ContactResource::make($book),
         ], 200);
     }
 
+    /**
+     * Display the specified resource.
+     */
     public function show($id)
     {
         // Attempt to find the task by ID
-        $book = Book::find($id);
+        $contact = contact::find($id);
 
         // Handle case when the task is not found
-        if (!$book) {
+        if (!$contact) {
             return response()->json([
                 'success' => false,
                 'message' => 'Task not found',
@@ -44,34 +60,42 @@ class BookController extends Controller
         // Return the task as a resource
         return response()->json([
             'success' => true,
-            'data' => new BookResource($book),
+            'data' => new ContactResource($contact),
         ], 200);
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(contact $contact)
+    {
+        //
+    }
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
-        $book = Book::find($id);
+        $contact = contact::find($id);
 
         // Handle case when the task is not found
-        if (!$book) {
+        if (!$contact) {
             return response()->json([
                 'success' => false,
                 'message' => 'Task not found',
             ], 404);
         }
 
-        $book->delete();
+        $contact->delete();
         return response()->json([
             'success' => true,
-            'data' => new BookResource($book),
+            'data' => new ContactResource($contact),
         ], 200);
     }
-
-
     public function destroyAll()
     {
         try {
-            Book::truncate();
+            contact::truncate();
             return response()->json([
                 'message' => 'All tasks deleted successfully.',
             ], 200);
@@ -83,43 +107,29 @@ class BookController extends Controller
             ], 500);
         }
     }
-
-    public function update(UpdateBookRequest $request, Book $book)
+    public function update(UpdateContactRequest $request, contact $contact)
     {
         try {
-            $book->fieldId = $request->input('fieldId');
-            $book->username = $request->input('username');
-            $book->phoneNumber = $request->input('phoneNumber');
-            $book->time = $request->input('time');
-            $book->date = $request->input('date');
-            $book->message = $request->input('message');
-            $book->status = $request->input('status');
+            $contact->email = $request->input('email');
+            $contact->phoneNumber = $request->input('phoneNumber');
+            $contact->message = $request->input('message');
 
-            // if ($book->save()) {
-            //     Log::info('Book updated successfully.');
-            // } else {
-            //     Log::error('Failed to update book.');
-            // }
+            $contact->save();
 
+            // Return the updated task as a resource
             return response()->json([
                 'success' => true,
-                'data' => BookResource::make($book),
+                'data' => ContactResource::make($contact),
             ], 200);
 
         } catch (\Exception $e) {
-            Log::error('Error updating book: ' . $e->getMessage());
+            // Return a friendly error response
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred while updating the task.',
                 'error' => $e->getMessage(),
             ], 500);
         }
-
     }
 
-
-    public function index()
-    {
-        return BookResource::collection(Book::all());
-    }
 }
